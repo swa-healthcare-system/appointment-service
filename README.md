@@ -1,5 +1,12 @@
 # AppointmentService
 
+## How to run?
+
+- Simply execute `docker-compose up -d` and the server application with database will be build and run.
+- The server will be listening on `localhost:8080`.
+- You can explore and try the functionality with Swagger documentation `localhost:8080/swagger`
+
+## Server application information
 This project was created using the [Ktor Project Generator](https://start.ktor.io).
 
 Here are some useful links to get you started:
