@@ -21,7 +21,7 @@ fun Application.configureRouting(
         }
 
         get("/appointment/{id}") {
-            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest)
             val appointment = appointmentService.getAppointmentById(id)
             if (appointment != null) {
                 call.respond(appointment)
@@ -31,13 +31,18 @@ fun Application.configureRouting(
         }
 
         post("/appointment") {
-            val dto = call.receive<Appointment>()
-            val created = appointmentService.createAppointment(dto)
-            call.respond(HttpStatusCode.Created, created)
+            try {
+                val dto = call.receive<Appointment>()
+                val created = appointmentService.createAppointment(dto)
+                call.respond(HttpStatusCode.Created, created)
+            } catch (e: Exception) {
+                log.error("Failed to receive Appointment: ${e.message}", e)
+                call.respond(HttpStatusCode.BadRequest, "Invalid request payload")
+            }
         }
 
         put("/appointment/{id}") {
-            val id = call.parameters["id"] ?: return@put call.respond(HttpStatusCode.BadRequest)
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@put call.respond(HttpStatusCode.BadRequest)
             val dto = call.receive<Appointment>()
             val updated = appointmentService.updateAppointment(id, dto)
             if (updated != null) {
@@ -48,7 +53,7 @@ fun Application.configureRouting(
         }
 
         delete("/appointment/{id}") {
-            val id = call.parameters["id"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@delete call.respond(HttpStatusCode.BadRequest)
             val deleted = appointmentService.deleteAppointment(id)
             if (deleted) {
                 call.respond(HttpStatusCode.NoContent)

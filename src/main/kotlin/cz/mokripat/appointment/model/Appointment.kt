@@ -1,11 +1,12 @@
 package cz.mokripat.appointment.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // Data class representing an Appointment
 @Serializable
 data class Appointment(
-    val id: String,
+    val id: Int? = null,
     val doctorId: String,
     val patientId: String,
     val fromTS: String,
@@ -15,6 +16,8 @@ data class Appointment(
 ) {
     @Serializable
     enum class Status {
-        BOOKED, CANCELLED, COMPLETED
+        @SerialName("booked") BOOKED,
+        @SerialName("canceled") CANCELED,
+        @SerialName("completed") COMPLETED
     }
 }

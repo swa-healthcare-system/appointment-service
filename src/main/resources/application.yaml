@@ -4,3 +4,11 @@ ktor:
             - cz.mokripat.appointment.ApplicationKt.module
     deployment:
         port: 8080
+
+
+database:
+    driver: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5555/appointments"
+    user: "postgres"
+    password: "password"
+    maxConnections: 10

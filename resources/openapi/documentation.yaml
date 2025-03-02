@@ -95,15 +95,15 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: integer
         doctorId:
           type: string
         patientId:
           type: string
-        from:
+        fromTS:
           type: string
           format: date-time
-        to:
+        toTS:
           type: string
           format: date-time
         note:

@@ -1,6 +1,8 @@
-
 val kotlin_version: String by project
 val logback_version: String by project
+val exposed_version: String by project
+val postgresql_version: String by project
+val hikaricp_version: String by project
 
 plugins {
     kotlin("jvm") version "2.1.10"
@@ -32,4 +34,10 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version") // Exposed core
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")  // Exposed DAO
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version") // Exposed JDBC support
+    implementation("org.postgresql:postgresql:$postgresql_version") // PostgreSQL JDBC Driver
+    implementation("com.zaxxer:HikariCP:$hikaricp_version") // HikariCP for connection pooling
 }

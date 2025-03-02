@@ -2,12 +2,12 @@ package cz.mokripat.appointment.repository
 
 import cz.mokripat.appointment.model.Appointment
 
-class DummyAppointmentRepositoryImpl() : AppointmentRepository {
+class DummyAppointmentRepository() : AppointmentRepository {
     override fun getAllAppointments(): List<Appointment> {
         return listOf()
     }
 
-    override fun getAppointmentById(id: String): Appointment? {
+    override fun getAppointmentById(id: Int): Appointment? {
         return null
     }
 
@@ -15,11 +15,11 @@ class DummyAppointmentRepositoryImpl() : AppointmentRepository {
         return appointment
     }
 
-    override fun updateAppointment(id: String, appointment: Appointment): Appointment? {
+    override fun updateAppointment(id: Int, appointment: Appointment): Appointment? {
         return appointment
     }
 
-    override fun deleteAppointment(id: String): Boolean {
+    override fun deleteAppointment(id: Int): Boolean {
         return true
     }
 }
