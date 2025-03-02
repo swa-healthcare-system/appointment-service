@@ -1,5 +1,13 @@
 # AppointmentService
 
+## Used technology
+- Ktor framework to build server application (service)
+- Gradle to build the service code
+- Koin for Kotlin dependency injection
+- Postgres relational database to persist service data
+- Docker Compose for easy build and configuration
+- Swagger for API documentation
+
 ## How to run?
 
 - Simply execute `docker-compose up -d` and the server application with database will be build and run.
