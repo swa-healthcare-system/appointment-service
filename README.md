@@ -1,18 +1,18 @@
 # AppointmentService
 
-## Used technology
-- Ktor framework to build server application (service)
-- Gradle to build the service code
-- Koin for Kotlin dependency injection
-- Postgres relational database to persist service data
-- Docker Compose for easy build and configuration
-- Swagger for API documentation
-
 ## How to run?
 
 - Simply execute `docker-compose up -d` and the server application with database will be build and run.
 - The server will be listening on `localhost:8080`.
 - You can explore and try the functionality with Swagger documentation `localhost:8080/swagger`
+
+## Used technology
+- `Ktor` framework to build server application (service)
+- `Gradle` to handle dependencies and build of the service code
+- `Koin` for Kotlin dependency injection
+- `Postgres` relational database to persist service data
+- `Docker Compose` for easy build and configuration
+- `Swagger` for API documentation
 
 ## Server application information
 This project was created using the [Ktor Project Generator](https://start.ktor.io).
