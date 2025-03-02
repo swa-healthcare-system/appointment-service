@@ -11,5 +11,21 @@ services:
       - "POSTGRES_PASSWORD=password"
       - "POSTGRES_USER=postgres"
       - "POSTGRES_DB=appointments"
+
+  ktor-server:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=appointments
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+    command: [ "java", "-jar", "/app/ktor-server.jar" ]
+    restart: unless-stopped
+
 volumes:
   postgres-data:

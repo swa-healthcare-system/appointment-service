@@ -6,12 +6,18 @@ import cz.mokripat.appointment.model.Appointment
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Database
 
+private val dbHost = System.getenv("DB_HOST") ?: "localhost"
+private val dbPort = System.getenv("DB_PORT") ?: "5555"
+private val dbName = System.getenv("DB_NAME") ?: "appointments"
+private val dbUser = System.getenv("DB_USER") ?: "postgres"
+private val dbPassword = System.getenv("DB_PASSWORD") ?: "password"
+
 fun initDatabase() {
     val config = HikariConfig().apply {
-        jdbcUrl = "jdbc:postgresql://localhost:5555/appointments"
+        jdbcUrl = "jdbc:postgresql://$dbHost:$dbPort/$dbName"
         driverClassName = "org.postgresql.Driver"
-        username = "postgres"
-        password = "password"
+        username = dbUser
+        password = dbPassword
         maximumPoolSize = 10
     }
     val dataSource = HikariDataSource(config)
