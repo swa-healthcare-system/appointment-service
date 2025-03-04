@@ -59,15 +59,10 @@ class ApplicationTest {
         status = Appointment.Status.BOOKED
     )
 
-    @BeforeTest
-    fun setup() {
-        stopKoin() // Stop any running Koin instances before starting tests
-    }
-
     @AfterTest
     fun teardown() {
-        stopKoin() // Ensure Koin is stopped after tests
         mockRepository.clear()
+        stopKoin()
     }
 
     @Test
