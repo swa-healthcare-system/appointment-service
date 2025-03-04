@@ -19,6 +19,13 @@ fun Application.module() {
 
     initDatabase()
 
+    applicationBase()
+}
+
+/**
+ * Separated base which can be used also for testing.
+ */
+fun Application.applicationBase() {
     val appointmentService: AppointmentService by inject()
 
     configureHTTP()
