@@ -4,6 +4,7 @@ import cz.mokripat.appointment.configureHTTP
 import cz.mokripat.appointment.model.Appointment
 import cz.mokripat.appointment.model.configureSerialization
 import cz.mokripat.appointment.repository.AppointmentRepository
+import cz.mokripat.appointment.repository.MockAppointmentRepository
 import cz.mokripat.appointment.routes.configureRouting
 import cz.mokripat.appointment.service.AppointmentService
 import io.ktor.client.request.*

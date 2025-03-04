@@ -1,7 +1,6 @@
-package cz.mokripat
+package cz.mokripat.appointment.repository
 
 import cz.mokripat.appointment.model.Appointment
-import cz.mokripat.appointment.repository.AppointmentRepository
 
 class MockAppointmentRepository : AppointmentRepository {
     private val appointments = mutableListOf<Appointment>()
