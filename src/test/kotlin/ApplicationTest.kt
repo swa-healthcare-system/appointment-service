@@ -6,6 +6,7 @@ import cz.mokripat.appointment.model.configureSerialization
 import cz.mokripat.appointment.repository.AppointmentRepository
 import cz.mokripat.appointment.repository.MockAppointmentRepository
 import cz.mokripat.appointment.routes.configureRouting
+import cz.mokripat.appointment.service.AppointmentProducerService
 import cz.mokripat.appointment.service.AppointmentService
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -25,7 +26,14 @@ class ApplicationTest {
 
     private val testModule = module {
         single<AppointmentRepository> { mockRepository }
-        single { AppointmentService(get()) }
+        single<AppointmentProducerService> {
+            object : AppointmentProducerService {
+                override fun produceAppointmentCreated(appointment: Appointment) {
+                    Unit
+                }
+
+            } }
+        single { AppointmentService(get(), get()) }
     }
 
     private fun Application.testingModule() {

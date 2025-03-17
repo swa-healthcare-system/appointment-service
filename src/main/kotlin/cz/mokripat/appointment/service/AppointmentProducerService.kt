@@ -1,0 +1,45 @@
+package cz.mokripat.appointment.service
+
+import cz.mokripat.appointment.model.Appointment
+import kotlinx.serialization.json.Json
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.common.serialization.IntegerSerializer
+import org.apache.kafka.common.serialization.StringSerializer
+import java.util.*
+
+
+interface AppointmentProducerService {
+    fun produceAppointmentCreated(appointment: Appointment)
+}
+
+class AppointmentProducerServiceImpl: AppointmentProducerService {
+    private val topic = "appointment_events"
+
+    private val producer: KafkaProducer<Int, String>
+
+    init {
+        val kafkaHost = System.getenv("KAFKA_BROKER") ?: "localhost:9092"
+
+        val props = Properties().apply {
+            put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaHost)
+            put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer::class.java.name)
+            put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java.name)
+        }
+
+        producer = KafkaProducer(props)
+    }
+
+    override fun produceAppointmentCreated(appointment: Appointment) {
+        val eventJson = Json.encodeToString(appointment)
+        val record = ProducerRecord(topic, requireNotNull(appointment.id), eventJson)
+        producer.send(record) { metadata, exception ->
+            if (exception == null) {
+                println("Event sent to topic: ${metadata.topic()}, partition: ${metadata.partition()}, offset: ${metadata.offset()}")
+            } else {
+                println("Error sending event: ${exception.message}")
+            }
+        }
+    }
+}

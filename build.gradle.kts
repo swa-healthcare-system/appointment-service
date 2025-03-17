@@ -4,6 +4,12 @@ val exposed_version: String by project
 val postgresql_version: String by project
 val hikaricp_version: String by project
 val koin_version: String by project
+val kotlin_coroutines_version: String by project
+val kafka_version: String by project
+val pact_version: String by project
+val kotlin_serialization_version: String by project
+val mockk_version: String by project
+val junit_version: String  by project
 
 plugins {
     kotlin("jvm") version "2.1.10"
@@ -23,6 +29,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jcenter.bintray.com/") }
 }
 
 dependencies {
@@ -35,6 +42,7 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version") // Exposed core
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")  // Exposed DAO
@@ -44,4 +52,6 @@ dependencies {
 
     implementation("io.insert-koin:koin-ktor:$koin_version") // Koin for Ktor
     implementation("io.insert-koin:koin-core:$koin_version") // Koin core functionality
+
+    implementation("org.apache.kafka:kafka-clients:$kafka_version") // Kafka
 }

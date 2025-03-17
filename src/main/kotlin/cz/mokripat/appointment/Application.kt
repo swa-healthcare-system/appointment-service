@@ -2,6 +2,7 @@ package cz.mokripat.appointment
 
 import cz.mokripat.appointment.model.configureSerialization
 import cz.mokripat.appointment.routes.configureRouting
+import cz.mokripat.appointment.service.AppointmentConsumerService
 import cz.mokripat.appointment.service.AppointmentService
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
@@ -27,6 +28,7 @@ fun Application.module() {
  */
 fun Application.applicationBase() {
     val appointmentService: AppointmentService by inject()
+    val appointmentConsumerService: AppointmentConsumerService = AppointmentConsumerService()
 
     configureHTTP()
     configureSerialization()
