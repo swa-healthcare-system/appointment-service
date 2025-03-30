@@ -28,6 +28,10 @@ class ApplicationTest {
         single<AppointmentRepository> { mockRepository }
         single<AppointmentProducerService> {
             object : AppointmentProducerService {
+                override fun produceServiceStarted() {
+                    Unit
+                }
+
                 override fun produceAppointmentCreated(appointment: Appointment) {
                     Unit
                 }
