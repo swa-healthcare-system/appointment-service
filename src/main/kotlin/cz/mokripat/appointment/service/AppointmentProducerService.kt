@@ -11,11 +11,12 @@ import java.util.*
 
 
 interface AppointmentProducerService {
+    fun produceServiceStarted()
     fun produceAppointmentCreated(appointment: Appointment)
 }
 
 class AppointmentProducerServiceImpl: AppointmentProducerService {
-    private val topic = "appointment_events"
+    private val topic = "appointments-topic"
 
     private val producer: KafkaProducer<Int, String>
 
@@ -29,6 +30,18 @@ class AppointmentProducerServiceImpl: AppointmentProducerService {
         }
 
         producer = KafkaProducer(props)
+        produceServiceStarted()
+    }
+
+    override fun produceServiceStarted() {
+        val record = ProducerRecord(topic, 123, "AppointmentService started")
+        producer.send(record) { metadata, exception ->
+            if (exception == null) {
+                println("Event sent to topic: ${metadata.topic()}, partition: ${metadata.partition()}, offset: ${metadata.offset()}")
+            } else {
+                println("Error sending event: ${exception.message}")
+            }
+        }
     }
 
     override fun produceAppointmentCreated(appointment: Appointment) {

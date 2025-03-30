@@ -12,14 +12,14 @@ services:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_DB=appointments"
     networks:
-      - shared-net
+      - internal-net
 
   ktor-server:
     build: .
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
+      - "8089:8080"
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -30,12 +30,16 @@ services:
     command: [ "java", "-jar", "/app/ktor-server.jar" ]
     restart: unless-stopped
     networks:
+      - internal-net
       - shared-net
 
 volumes:
   postgres-data:
 
 networks:
+  internal-net:
+    internal: true
+
   shared-net:
     external: true
     name: kafka-network
