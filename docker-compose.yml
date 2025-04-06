@@ -27,6 +27,10 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=password
       - KAFKA_BROKER=kafka:9092
+      - EUREKA_URL=http://eureka-server:8761/eureka/v2
+      - HOSTNAME=appointment-service
+      - HOST_IP=host.docker.internal
+      - SERVICE_PORT=8089
     command: [ "java", "-jar", "/app/ktor-server.jar" ]
     restart: unless-stopped
     networks:

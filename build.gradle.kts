@@ -54,4 +54,11 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koin_version") // Koin core functionality
 
     implementation("org.apache.kafka:kafka-clients:$kafka_version") // Kafka
+
+    // Eureka dependencies
+    implementation("io.ktor:ktor-client-core")
+    implementation("io.ktor:ktor-client-cio")
+    implementation("io.ktor:ktor-client-content-negotiation")
+    implementation("io.ktor:ktor-serialization-jackson")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
