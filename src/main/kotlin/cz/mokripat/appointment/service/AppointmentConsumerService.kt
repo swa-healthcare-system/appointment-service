@@ -11,14 +11,12 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import java.time.Duration
 import java.util.*
 
-class AppointmentConsumerService {
+class AppointmentConsumerService(kafkaHost: String) {
     private val topic = "appointment_events"
 
     private val consumer: KafkaConsumer<Int, String>
 
     init {
-        val kafkaHost = System.getenv("KAFKA_BROKER") ?: "localhost:9092"
-
         val props = Properties().apply {
             put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaHost)
             put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer::class.java.name)

@@ -28,6 +28,7 @@ services:
       - DB_PASSWORD=password
       - KAFKA_BROKER=kafka:9092
       - EUREKA_URL=http://eureka-server:8761/eureka/v2
+      - CONFIG_URL=http://config-server:8888
       - HOSTNAME=appointment-service
       - HOST_IP=host.docker.internal
       - SERVICE_PORT=8089

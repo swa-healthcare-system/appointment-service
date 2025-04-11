@@ -15,14 +15,12 @@ interface AppointmentProducerService {
     fun produceAppointmentCreated(appointment: Appointment)
 }
 
-class AppointmentProducerServiceImpl: AppointmentProducerService {
+class AppointmentProducerServiceImpl(kafkaHost: String): AppointmentProducerService {
     private val topic = "appointments-topic"
 
     private val producer: KafkaProducer<Int, String>
 
     init {
-        val kafkaHost = System.getenv("KAFKA_BROKER") ?: "localhost:9092"
-
         val props = Properties().apply {
             put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaHost)
             put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer::class.java.name)
