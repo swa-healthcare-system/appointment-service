@@ -31,11 +31,15 @@ services:
       - HOSTNAME=appointment-service
       - HOST_IP=host.docker.internal
       - SERVICE_PORT=8089
+    labels:
+      - "prometheus.port=8080"
+      - "prometheus.path=/metrics"
     command: [ "java", "-jar", "/app/ktor-server.jar" ]
     restart: unless-stopped
     networks:
       - internal-net
       - shared-net
+      - prometheus-network
 
 volumes:
   postgres-data:
@@ -47,3 +51,7 @@ networks:
   shared-net:
     external: true
     name: kafka-network
+
+  prometheus-network:
+    external: true
+    name: prometheus-network

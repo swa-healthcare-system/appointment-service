@@ -61,4 +61,8 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation")
     implementation("io.ktor:ktor-serialization-jackson")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // Metrics
+    implementation("io.micrometer:micrometer-registry-prometheus:latest.release")
+    implementation("io.ktor:ktor-server-metrics-micrometer:latest.release")
 }
