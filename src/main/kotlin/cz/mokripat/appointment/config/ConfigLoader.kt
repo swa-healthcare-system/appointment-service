@@ -22,6 +22,7 @@ suspend fun loadRemoteConfig(serviceName: String, profile: String): AppConfig {
                 props[k] = v.jsonPrimitive.content
             }
         }
+        println("Configuration fetched $props")
     } catch (e: Exception) {
         Unit
     }
