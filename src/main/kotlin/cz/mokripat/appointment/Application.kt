@@ -1,5 +1,6 @@
 package cz.mokripat.appointment
 
+import cz.mokripat.appointment.config.loadRemoteConfig
 import cz.mokripat.appointment.eureka.EurekaClient
 import cz.mokripat.appointment.model.configureSerialization
 import cz.mokripat.appointment.routes.configureRouting
@@ -24,11 +25,15 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    startKoin {
-        modules(appModule)
+    val config = runBlocking {
+        loadRemoteConfig("appointment-service", "default")
     }
 
-    initDatabase()
+    startKoin {
+        modules(appModule(config))
+    }
+
+    initDatabase(config)
 
     val prometheusRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
@@ -68,7 +73,7 @@ fun Application.module() {
  */
 fun Application.applicationBase() {
     val appointmentService: AppointmentService by inject()
-    val appointmentConsumerService: AppointmentConsumerService = AppointmentConsumerService()
+    val appointmentConsumerService: AppointmentConsumerService by inject()
 
     configureHTTP()
     configureSerialization()
