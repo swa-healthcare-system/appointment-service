@@ -1,5 +1,6 @@
 package cz.mokripat.appointment.eureka
 
+import cz.mokripat.appointment.LoggerDelegate
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -8,6 +9,8 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 
 object EurekaClient {
+    private val logger by LoggerDelegate()
+
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             jackson()
@@ -39,21 +42,33 @@ object EurekaClient {
             )
         )
 
-        val response = client.post("$EUREKA_URL/apps/$APP_NAME") {
-            contentType(ContentType.Application.Json)
-            setBody(payload)
+        try {
+            val response = client.post("$EUREKA_URL/apps/$APP_NAME") {
+                contentType(ContentType.Application.Json)
+                setBody(payload)
+            }
+            logger.info("✅ Registered with Eureka: ${response.status}")
+        } catch (e: Exception) {
+            logger.info("❌ Failed to register with Eureka", e)
+            println("Caught an exception in EurekaClient: ${e.message}")
         }
-
-        println("✅ Registered with Eureka: ${response.status}")
     }
 
     suspend fun sendHeartbeat() {
-        val response = client.put("$EUREKA_URL/apps/$APP_NAME/$INSTANCE_ID") {}
-        println("💓 Eureka heartbeat: ${response.status}")
+        try {
+            val response = client.put("$EUREKA_URL/apps/$APP_NAME/$INSTANCE_ID") {}
+            logger.info("💓 Eureka heartbeat: ${response.status}")
+        } catch (e: Exception) {
+            logger.info("❌ Failed to send heartbeat to Eureka", e)
+        }
     }
 
     suspend fun deregister() {
-        val response = client.delete("$EUREKA_URL/apps/$APP_NAME/$INSTANCE_ID") {}
-        println("❌ Deregistered from Eureka: ${response.status}")
+        try {
+            val response = client.delete("$EUREKA_URL/apps/$APP_NAME/$INSTANCE_ID") {}
+            logger.error("👽 Deregistered from Eureka: ${response.status}")
+        } catch (e: Exception) {
+            logger.info("❌ Failed to deregister from Eureka", e)
+        }
     }
 }

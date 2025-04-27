@@ -39,6 +39,6 @@ suspend fun loadRemoteConfig(serviceName: String, profile: String): AppConfig {
         eurekaUrl = props["EUREKA_URL"] ?: System.getenv("EUREKA_URL") ?: "http://localhost:8761/eureka/v2",
         hostname = props["HOSTNAME"] ?: System.getenv("HOSTNAME") ?: "appointment-service",
         hostIp = props["HOST_IP"] ?: System.getenv("HOST_IP") ?: "localhost",
-        servicePort = props["SERVICE_PORT"]?.toIntOrNull() ?: System.getenv("SERVICE_PORT").toIntOrNull() ?: 8089
+        servicePort = props["SERVICE_PORT"]?.toIntOrNull() ?: System.getenv("SERVICE_PORT")?.toIntOrNull() ?: 8089
     )
 }

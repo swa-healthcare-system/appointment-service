@@ -1,5 +1,6 @@
 package cz.mokripat.appointment.service
 
+import cz.mokripat.appointment.LoggerDelegate
 import cz.mokripat.appointment.model.Appointment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -12,8 +13,9 @@ import java.time.Duration
 import java.util.*
 
 class AppointmentConsumerService(kafkaHost: String) {
-    private val topic = "appointment_events"
+    private val logger by LoggerDelegate()
 
+    private val topic = "appointment_events"
     private val consumer: KafkaConsumer<Int, String>
 
     init {
@@ -39,9 +41,9 @@ class AppointmentConsumerService(kafkaHost: String) {
             for (record in records) {
                 try {
                     val event = Json.decodeFromString<Appointment>(record.value())
-                    println("Consumed event: $event")
+                    logger.info("Consumed event: $event")
                 } catch (e: Exception) {
-                    println("Error decoding message: ${e.message}")
+                    logger.error("Error decoding message: ${e.message}")
                 }
             }
         }
