@@ -57,6 +57,10 @@ object EurekaClient {
     suspend fun sendHeartbeat() {
         try {
             val response = client.put("$EUREKA_URL/apps/$APP_NAME/$INSTANCE_ID") {}
+            if (response.status == HttpStatusCode.NotFound) {
+                register()
+            }
+
             logger.info("💓 Eureka heartbeat: ${response.status}")
         } catch (e: Exception) {
             logger.info("❌ Failed to send heartbeat to Eureka", e)

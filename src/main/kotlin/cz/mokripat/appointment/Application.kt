@@ -48,19 +48,17 @@ fun Application.module() {
     }
 
     environment.monitor.subscribe(ApplicationStarted) {
-        runBlocking {
+        launch {
             EurekaClient.register()
-            launch {
-                while (isActive) {
-                    delay(30_000)
-                    EurekaClient.sendHeartbeat()
-                }
+            while (isActive) {
+                delay(30_000)
+                EurekaClient.sendHeartbeat()
             }
         }
     }
 
     Runtime.getRuntime().addShutdownHook(Thread {
-        runBlocking {
+        launch {
             EurekaClient.deregister()
         }
     })
