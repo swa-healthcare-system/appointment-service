@@ -1,7 +1,10 @@
 package cz.mokripat.appointment.eureka
 
 import cz.mokripat.appointment.LoggerDelegate
+import cz.mokripat.appointment.model.EurekaResponseDto
+import cz.mokripat.appointment.model.InstanceDto
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -10,6 +13,7 @@ import io.ktor.serialization.jackson.*
 
 object EurekaClient {
     private val logger by LoggerDelegate()
+    var registered = false
 
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -47,6 +51,7 @@ object EurekaClient {
                 contentType(ContentType.Application.Json)
                 setBody(payload)
             }
+            registered = true
             logger.info("✅ Registered with Eureka: ${response.status}")
         } catch (e: Exception) {
             logger.info("❌ Failed to register with Eureka", e)
@@ -75,4 +80,30 @@ object EurekaClient {
             logger.info("❌ Failed to deregister from Eureka", e)
         }
     }
+
+    suspend fun discoverServiceBaseUrl(
+        appName: String
+    ): String? {
+        return try {
+            val response: EurekaResponseDto = client.get("$EUREKA_URL/apps/${appName.uppercase()}") {
+                accept(ContentType.Application.Json)
+            }.body()
+
+            logger.info("✅ Successfully discovered app ($appName) with Eureka")
+
+            val instance: InstanceDto? = response.application.instance
+                .firstOrNull { it.status == "UP" }
+
+            instance?.let {
+                // You could use hostName + port instead if needed
+                "http://${it.hostName}:${it.port.value}"
+            }
+        } catch (e: Exception) {
+            logger.info("❌ Failed to discover app ($appName)", e)
+            null
+        }
+    }
+
+    suspend fun getDoctorData(doctorHostname: String): String =
+        client.get("$doctorHostname/api/doctors").body<String>()
 }

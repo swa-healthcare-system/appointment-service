@@ -50,6 +50,18 @@ fun Application.module() {
     environment.monitor.subscribe(ApplicationStarted) {
         launch {
             EurekaClient.register()
+
+            while (!EurekaClient.registered) {
+                delay(30_000)
+                EurekaClient.register()
+            }
+
+            val doctorHostname = EurekaClient.discoverServiceBaseUrl("DOCTOR-SERVICE-SPRING-BOOT")
+            doctorHostname?.let {
+                val doctorData = EurekaClient.getDoctorData(doctorHostname)
+                updateDatabase(doctorData)
+            }
+
             while (isActive) {
                 delay(30_000)
                 EurekaClient.sendHeartbeat()
