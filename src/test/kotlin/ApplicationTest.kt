@@ -2,8 +2,11 @@ package cz.mokripat
 
 import cz.mokripat.appointment.configureHTTP
 import cz.mokripat.appointment.model.Appointment
+import cz.mokripat.appointment.model.AvailabilityPayload
+import cz.mokripat.appointment.model.DoctorPayload
 import cz.mokripat.appointment.model.configureSerialization
 import cz.mokripat.appointment.repository.AppointmentRepository
+import cz.mokripat.appointment.repository.DoctorAvailabilityRepository
 import cz.mokripat.appointment.repository.MockAppointmentRepository
 import cz.mokripat.appointment.routes.configureRouting
 import cz.mokripat.appointment.service.AppointmentProducerService
@@ -26,6 +29,29 @@ class ApplicationTest {
 
     private val testModule = module {
         single<AppointmentRepository> { mockRepository }
+        single<DoctorAvailabilityRepository> {
+            object : DoctorAvailabilityRepository {
+                override fun addDoctor(payload: DoctorPayload) {
+                    Unit
+                }
+
+                override fun removeDoctor(doctorId: String) {
+                    Unit
+                }
+
+                override fun getDoctorAvailability(doctorId: String): List<String> {
+                    return listOf("2025-05-11")
+                }
+
+                override fun addAvailability(payload: AvailabilityPayload): Boolean {
+                    return false
+                }
+
+                override fun removeAvailability(payload: AvailabilityPayload): Boolean {
+                    return false
+                }
+            }
+        }
         single<AppointmentProducerService> {
             object : AppointmentProducerService {
                 override fun produceServiceStarted() {
@@ -36,8 +62,12 @@ class ApplicationTest {
                     Unit
                 }
 
+                override fun produceAppointmentCanceled(appointment: Appointment) {
+                    Unit
+                }
+
             } }
-        single { AppointmentService(get(), get()) }
+        single { AppointmentService(get(), get(), get()) }
     }
 
     private fun Application.testingModule() {
@@ -56,8 +86,8 @@ class ApplicationTest {
         id = 1,
         doctorId = "doc123",
         patientId = "pat456",
-        fromTS = "2025-03-15T09:00:00",
-        toTS = "2025-03-15T10:00:00",
+        fromTS = "2025-05-11T07:19:51.796Z",
+        toTS = "2025-05-11T07:19:51.796Z",
         note = "Follow-up appointment",
         status = Appointment.Status.BOOKED
     )
@@ -66,8 +96,8 @@ class ApplicationTest {
         id = 2,
         doctorId = "doc123",
         patientId = "pat457",
-        fromTS = "2025-03-15T09:00:00",
-        toTS = "2025-03-15T10:00:00",
+        fromTS = "2025-05-11T07:19:51.796Z",
+        toTS = "2025-05-11T07:19:51.796Z",
         note = "Follow-up appointment",
         status = Appointment.Status.BOOKED
     )
