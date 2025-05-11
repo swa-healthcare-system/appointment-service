@@ -15,7 +15,7 @@ import java.util.*
 class AppointmentConsumerService(kafkaHost: String) {
     private val logger by LoggerDelegate()
 
-    private val topic = "appointment_events"
+    private val topic = "appointment-topic"
     private val consumer: KafkaConsumer<Int, String>
 
     init {

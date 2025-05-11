@@ -35,7 +35,7 @@ class AppointmentProducerServiceImpl(kafkaHost: String) : AppointmentProducerSer
     }
 
     override fun produceServiceStarted() {
-        val record = ProducerRecord(topic, 123, "AppointmentService started")
+        val record = ProducerRecord(topic, 123, "AppointmentService started at ${System.currentTimeMillis()}")
         producer.send(record) { metadata, exception ->
             logResult(metadata, exception)
         }

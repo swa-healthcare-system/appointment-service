@@ -25,6 +25,10 @@ class MockAppointmentRepository : AppointmentRepository {
 
     override fun deleteAppointment(id: Int): Boolean = appointments.removeIf { it.id == id }
 
+    override fun getAppointmentsByDoctorId(doctorId: String): List<Appointment> {
+        return appointments.filter { it.doctorId == doctorId }
+    }
+
     fun addAppointment(appointment: Appointment) = appointments.add(appointment)
 
     fun clear() = appointments.clear()

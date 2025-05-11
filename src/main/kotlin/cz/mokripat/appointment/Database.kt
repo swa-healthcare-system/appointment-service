@@ -4,6 +4,10 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import cz.mokripat.appointment.config.AppConfig
 import cz.mokripat.appointment.model.Appointment
+import cz.mokripat.appointment.model.AvailabilityPayload
+import cz.mokripat.appointment.model.DoctorPayload
+import cz.mokripat.appointment.repository.DoctorAvailabilityRepository
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Database
 
@@ -19,9 +23,18 @@ fun initDatabase(appConfig: AppConfig) {
     Database.connect(dataSource)
 }
 
-fun updateDatabase(data: String) {
+fun updateDatabase(data: String, doctorAvailabilityRepository: DoctorAvailabilityRepository) {
     println("Updating database with $data")
-    Unit // Skipped due to time limitations
+    val json = Json { ignoreUnknownKeys = true }
+    val doctors = json.decodeFromString<List<DoctorPayload>>(data)
+    val availabilityMap: Map<DoctorPayload, List<String>> = doctors.associateWith { it.doctorAvailabilities }
+
+    availabilityMap.entries.forEach { entry ->
+        doctorAvailabilityRepository.addDoctor(entry.key)
+        entry.value.forEach { availability ->
+            doctorAvailabilityRepository.addAvailability(AvailabilityPayload(entry.key.id.toString(), availability))
+        }
+    }
 }
 
 object Appointments : IdTable<Int>() {

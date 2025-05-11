@@ -71,4 +71,18 @@ class PostgreAppointmentRepository : AppointmentRepository {
         val deleted = Appointments.deleteWhere { Appointments.id eq id }
         deleted > 0
     }
+
+    override fun getAppointmentsByDoctorId(doctorId: String): List<Appointment> = transaction {
+        Appointments.select { Appointments.doctorId eq doctorId }.map {
+            Appointment(
+                id = it[Appointments.id].value,
+                doctorId = it[Appointments.doctorId],
+                patientId = it[Appointments.patientId],
+                fromTS = it[Appointments.fromTS],
+                toTS = it[Appointments.toTS],
+                note = it[Appointments.note],
+                status = it[Appointments.status]
+            )
+        }
+    }
 }

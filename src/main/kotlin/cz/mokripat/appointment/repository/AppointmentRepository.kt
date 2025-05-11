@@ -8,4 +8,5 @@ interface AppointmentRepository {
     fun insertAppointment(appointment: Appointment): Appointment
     fun updateAppointment(id: Int, appointment: Appointment): Appointment?
     fun deleteAppointment(id: Int): Boolean
+    fun getAppointmentsByDoctorId(doctorId: String): List<Appointment>
 }

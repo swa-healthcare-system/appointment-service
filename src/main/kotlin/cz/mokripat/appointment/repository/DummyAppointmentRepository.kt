@@ -22,4 +22,8 @@ class DummyAppointmentRepository() : AppointmentRepository {
     override fun deleteAppointment(id: Int): Boolean {
         return true
     }
+
+    override fun getAppointmentsByDoctorId(doctorId: String): List<Appointment> {
+        return listOf()
+    }
 }

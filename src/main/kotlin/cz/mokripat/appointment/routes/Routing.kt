@@ -35,6 +35,9 @@ fun Application.configureRouting(
                 val dto = call.receive<Appointment>()
                 val created = appointmentService.createAppointment(dto)
                 call.respond(HttpStatusCode.Created, created)
+            } catch (e: IllegalArgumentException) {
+                log.error("Failed to create Appointment due to not available doctor: ${e.message?.take(100)}", e)
+                call.respond(HttpStatusCode.BadRequest, "Doctor is not available at that date")
             } catch (e: Exception) {
                 log.error("Failed to receive Appointment: ${e.message}", e)
                 call.respond(HttpStatusCode.BadRequest, "Invalid request payload")
