@@ -5,7 +5,6 @@ import cz.mokripat.appointment.eureka.EurekaClient
 import cz.mokripat.appointment.model.configureSerialization
 import cz.mokripat.appointment.repository.DoctorAvailabilityRepository
 import cz.mokripat.appointment.routes.configureRouting
-import cz.mokripat.appointment.service.AppointmentConsumerService
 import cz.mokripat.appointment.service.AppointmentService
 import cz.mokripat.appointment.service.DoctorConsumerService
 import io.ktor.server.application.*
@@ -86,11 +85,9 @@ fun Application.module() {
  */
 fun Application.applicationBase() {
     val appointmentService: AppointmentService by inject()
-    val appointmentConsumerService: AppointmentConsumerService by inject()
     val doctorConsumerService: DoctorConsumerService by inject()
 
     doctorConsumerService.toString()
-    appointmentConsumerService.toString()
 
     configureHTTP()
     configureSerialization()

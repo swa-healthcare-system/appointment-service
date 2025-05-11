@@ -15,6 +15,5 @@ fun appModule(appConfig: AppConfig): Module = module {
     single<DoctorAvailabilityRepository> { InMemoryDoctorAvailabilityRepository() }
     single<AppointmentProducerService> { AppointmentProducerServiceImpl(appConfig.kafkaBroker) }
     single (createdAtStart = true) { DoctorConsumerService(get(), get(), appConfig.kafkaBroker) }
-    single { AppointmentConsumerService(appConfig.kafkaBroker) }
     single { AppointmentService(get(), get(), get()) }
 }

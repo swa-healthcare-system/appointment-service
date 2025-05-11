@@ -10,7 +10,6 @@ class InMemoryDoctorAvailabilityRepository : DoctorAvailabilityRepository {
     override fun addDoctor(payload: DoctorPayload) {
         if (!data.containsKey(payload.name)) {
             data[payload.id.toString()] = mutableListOf()
-            println("Adding ${payload.id}")
         }
     }
 

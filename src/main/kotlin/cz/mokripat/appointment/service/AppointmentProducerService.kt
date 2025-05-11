@@ -20,7 +20,7 @@ interface AppointmentProducerService {
 class AppointmentProducerServiceImpl(kafkaHost: String) : AppointmentProducerService {
     private val logger by LoggerDelegate()
 
-    private val topic = "appointments-topic"
+    private val topic = "appointment-topic"
     private val producer: KafkaProducer<Int, String>
 
     init {
