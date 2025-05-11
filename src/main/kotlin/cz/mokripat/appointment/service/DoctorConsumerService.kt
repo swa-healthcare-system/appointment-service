@@ -18,7 +18,7 @@ import java.time.Duration
 import java.util.*
 
 class DoctorConsumerService(
-    private val appointmentRepository: AppointmentRepository,
+    private val appointmentService: AppointmentService,
     private val doctorAvailabilityRepository: DoctorAvailabilityRepository,
     kafkaHost: String
 ) {
@@ -65,11 +65,11 @@ class DoctorConsumerService(
                             logger.info("Doctor Deleted: ${event.payload}")
                             val doctorId = event.payload.id.toString()
                             doctorAvailabilityRepository.removeDoctor(doctorId)
-                            val toCancel = appointmentRepository.getAppointmentsByDoctorId(doctorId)
+                            val toCancel = appointmentService.getAppointmentsByDoctorId(doctorId)
 
                             toCancel.forEach { appointment ->
                                 logger.info("Canceled Appointment: $appointment")
-                                appointmentRepository.deleteAppointment(appointment.id!!)
+                                appointmentService.deleteAppointment(appointment.id!!)
                             }
                         }
 

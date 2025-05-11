@@ -15,6 +15,8 @@ class AppointmentService(
 
     fun getAppointmentById(id: Int): Appointment? = repository.getAppointmentById(id)
 
+    fun getAppointmentsByDoctorId(doctorId: String): List<Appointment> = repository.getAppointmentsByDoctorId(doctorId)
+
     fun createAppointment(appointment: Appointment): Appointment {
         // Convert fromTS to LocalDate for availability comparison
         val appointmentDate = ZonedDateTime.parse(appointment.fromTS, DateTimeFormatter.ISO_DATE_TIME)
@@ -39,5 +41,15 @@ class AppointmentService(
         return repository.updateAppointment(id, appointment)
     }
 
-    fun deleteAppointment(id: Int): Boolean = repository.deleteAppointment(id)
+    fun deleteAppointment(id: Int): Boolean {
+        val appointment = repository.getAppointmentById(id)
+
+        appointment?.let {
+            repository.deleteAppointment(id)
+            producer.produceAppointmentCanceled(it)
+            return true
+        }
+
+        return false
+    }
 }

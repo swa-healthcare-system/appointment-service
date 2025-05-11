@@ -15,6 +15,7 @@ import java.util.*
 interface AppointmentProducerService {
     fun produceServiceStarted()
     fun produceAppointmentCreated(appointment: Appointment)
+    fun produceAppointmentCanceled(appointment: Appointment)
 }
 
 class AppointmentProducerServiceImpl(kafkaHost: String) : AppointmentProducerService {
@@ -43,6 +44,14 @@ class AppointmentProducerServiceImpl(kafkaHost: String) : AppointmentProducerSer
 
     override fun produceAppointmentCreated(appointment: Appointment) {
         val eventJson = Json.encodeToString(appointment)
+        val record = ProducerRecord(topic, requireNotNull(appointment.id), eventJson)
+        producer.send(record) { metadata, exception ->
+            logResult(metadata, exception)
+        }
+    }
+
+    override fun produceAppointmentCanceled(appointment: Appointment) {
+        val eventJson = Json.encodeToString(appointment.copy(status = Appointment.Status.CANCELED))
         val record = ProducerRecord(topic, requireNotNull(appointment.id), eventJson)
         producer.send(record) { metadata, exception ->
             logResult(metadata, exception)
