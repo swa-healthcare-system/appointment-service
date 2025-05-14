@@ -37,10 +37,32 @@ services:
       - "prometheus.path=/metrics"
     command: [ "java", "-jar", "/app/ktor-server.jar" ]
     restart: unless-stopped
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24227"
+        fluentd-async-connect: "true"
+        tag: appointment-service
+    volumes:
+      - ./../logs:/var/log/app
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - internal-net
       - shared-net
       - prometheus-network
+      - logging-net
+
+  fluentd-appointment:
+    build:
+      context: .
+      dockerfile: ./fluentd/Dockerfile
+    container_name: fluentd-appointment
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    ports:
+      - "24227:24227"
+    networks:
+      - logging-net
 
 volumes:
   postgres-data:
@@ -56,3 +78,7 @@ networks:
   prometheus-network:
     external: true
     name: prometheus-network
+
+  logging-net:
+    external: true
+    name: logging-network
