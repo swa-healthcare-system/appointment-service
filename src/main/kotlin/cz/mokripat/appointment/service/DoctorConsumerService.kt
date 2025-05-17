@@ -2,7 +2,6 @@ package cz.mokripat.appointment.service
 
 import cz.mokripat.appointment.LoggerDelegate
 import cz.mokripat.appointment.model.AvailabilityChangeEvent
-import cz.mokripat.appointment.model.DoctorDeleteEvent
 import cz.mokripat.appointment.model.DoctorUpdateEvent
 import cz.mokripat.appointment.repository.AppointmentRepository
 import cz.mokripat.appointment.repository.DoctorAvailabilityRepository
@@ -62,9 +61,9 @@ class DoctorConsumerService(
                         }
 
                         "DOCTOR_DELETED" -> {
-                            val event = parser.decodeFromJsonElement<DoctorDeleteEvent>(json)
+                            val event = parser.decodeFromJsonElement<DoctorUpdateEvent>(json)
                             logger.info("Doctor Deleted: ${event.payload}")
-                            val doctorId = event.payload.toString()
+                            val doctorId = event.payload.id.toString()
                             doctorAvailabilityRepository.removeDoctor(doctorId)
                             val toCancel = appointmentService.getAppointmentsByDoctorId(doctorId)
 
