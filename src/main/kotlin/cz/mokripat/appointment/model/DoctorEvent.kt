@@ -32,9 +32,3 @@ data class AvailabilityPayload(
     val doctorId: String,
     val availabilityDate: String
 )
-
-@Serializable
-data class DoctorDeleteEvent(
-    override val eventType: String,
-    val payload: Int
-) : DoctorEvent()
