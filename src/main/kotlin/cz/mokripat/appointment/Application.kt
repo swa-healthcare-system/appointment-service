@@ -57,7 +57,7 @@ fun Application.module() {
                 EurekaClient.register()
             }
 
-            val doctorHostname = EurekaClient.discoverServiceBaseUrl("DOCTOR-SERVICE-SPRING-BOOT")
+            val doctorHostname = EurekaClient.discoverServiceBaseUrl("DOCTOR-SERVICE")
             doctorHostname?.let {
                 val availabilityRepository: DoctorAvailabilityRepository by inject()
                 val doctorData = EurekaClient.getDoctorData(doctorHostname)
